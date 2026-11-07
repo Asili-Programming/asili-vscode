@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Requires VS Code 1.145 or newer (`engines.vscode` `^1.145.0`, matching `@types/vscode`);
+  `vscode-languageclient` 11.
 - Moved out of the Asili repository (`extensions/vscode/`) into its own,
   `Asili-Programming/asili-vscode`. `npm run build-lsp` builds the bundled `pata-lsp` from an
   Asili checkout instead of a binary kept in git.

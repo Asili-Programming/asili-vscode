@@ -9,6 +9,10 @@ updates:
     directory: "/docs-tooling"
     schedule:
       interval: "weekly"
+    ignore:
+      # TypeDoc's peer range stops at TypeScript 6.0; 7 (the native compiler) breaks it.
+      - dependency-name: "typescript"
+        versions: [">= 7"]
 
   - package-ecosystem: "github-actions"
     directory: "/"
