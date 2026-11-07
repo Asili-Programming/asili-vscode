@@ -9,8 +9,8 @@
   Asili checkout instead of a binary kept in git.
 - Added snippets for grouped `weka`/`thabiti` declarations.
 - Documented that builtin standard-library functions are ambient and do not require `leta`.
-- Added current-file and workspace lint commands backed by the globally installed `pata-lint`,
-  plus the `asili.linterPath` setting.
+- Added current-file and workspace lint commands, running `pata kagua` through the
+  `asili.cliPath` CLI.
 - Fixed Run Test: it passed `--filter`, which `pata jaribu` rejects; it now passes `--chuja`.
 
 All notable changes to the Asili VS Code extension are recorded here. The format is based on

@@ -44,7 +44,7 @@ function shellQuote(value: string): string {
 
 function lintCommand(document: TextDocument | undefined, workspaceRoot: string | undefined): void {
   const config = workspace.getConfiguration("asili");
-  const linterPath = config.get<string>("linterPath") ?? "pata-lint";
+  const pataPath = config.get<string>("cliPath") ?? "pata";
   const target = document ? document.uri.fsPath : workspaceRoot ?? ".";
   const root = findProjectRoot(path.dirname(target));
   if (!lintTerminal || lintTerminal.exitStatus !== undefined) {
@@ -52,7 +52,7 @@ function lintCommand(document: TextDocument | undefined, workspaceRoot: string |
   }
   lintTerminal.show(true);
   lintTerminal.sendText(
-    `cd ${shellQuote(root)} && ${shellQuote(linterPath)} ${shellQuote(target)}`
+    `cd ${shellQuote(root)} && ${shellQuote(pataPath)} kagua ${shellQuote(target)}`
   );
 }
 
