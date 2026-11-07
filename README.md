@@ -28,7 +28,7 @@ Syntax highlighting and full language server support (Mwalimu) for the Asili lan
   declarations such as `weka r = 0.0, c = 0.0`.
 - Code actions — quick-fixes for diagnostics (currently: "Add doc comment").
 - Code lens — a "▶ Run Test" lens above every `#[jaribio]` function, running
-  `pata jaribu --filter <name>` in an integrated terminal.
+  `pata jaribu --chuja <name>` in an integrated terminal.
 - Lint commands — use **Asili: Lint Current File** or **Asili: Lint Workspace** to run
   `pata kagua` with the nearest `pata.toml` configuration.
 - Formatting, folding ranges, rename (with `prepareRename` validation), and "highlight
