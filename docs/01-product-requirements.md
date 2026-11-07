@@ -4,7 +4,7 @@ As of 7 November 2026 · Victor Kaiuki
 
 Every Pata tool and every Mwalimu (LSP) feature should be reachable from VS Code without opening a
 terminal: from the Command Palette, the status bar, CodeLens, tasks and the debugger. Today the
-extension exposes three commands, and one of them is broken.
+extension exposes three commands.
 
 ## Problem and goals
 
@@ -12,8 +12,8 @@ The extension (v0.2.0) gives syntax highlighting, snippets, the Mwalimu language
 commands: Run Test, Lint Current File, Lint Workspace. Everything else Pata does needs a terminal:
 building, running, formatting a project, checking a project, creating one, managing dependencies,
 the REPL, tracing, coverage and debugging. `pata-dap` exists but the extension registers no
-debugger. **Run Test is broken**: it sends `pata jaribu --filter`, and `pata jaribu` only accepts
-`--chuja` (checked 7 November 2026: `kosa: hoja isiyotambuliwa kwenye jaribu: --filter`).
+debugger. Run Test was broken until 7 November 2026: it sent `pata jaribu --filter`, which the CLI
+rejects (`kosa: hoja isiyotambuliwa kwenye jaribu: --filter`); it now sends `--chuja` (VS-1, done).
 
 Goals:
 
@@ -47,7 +47,7 @@ Every row must have a surface in v1 unless marked v2. "Today" is what v0.2.0 doe
 | `jenga --muda` | Phase timings | None | Command option |
 | `pata tenda` | Run a built `.asb` | None | Explorer context menu on `.asb` files |
 | `--fuatilia`, `pata fuatilia` | Trace build and run; read a trace | None | Command "run with trace", trace opened as a tree view |
-| `pata jaribu` | Run tests | Run Test CodeLens (broken flag) | Testing API (Test Explorer), CodeLens per test, `--chuja` |
+| `pata jaribu` | Run tests | Run Test CodeLens (terminal) | Testing API (Test Explorer), CodeLens per test, `--chuja` |
 | `jaribu --chanjo` | Coverage | None | "Run tests with coverage", shown with the Testing API coverage view |
 | `jaribu --orodha`, `--json` | List tests, machine output | None | Used by the Test Explorer to discover tests |
 | `pata nadhifu` | Format | Via LSP format only | Format document (LSP), command "format project", `--kagua` check |

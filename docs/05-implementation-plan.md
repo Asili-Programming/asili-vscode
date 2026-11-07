@@ -2,7 +2,7 @@
 
 As of 7 November 2026 · Victor Kaiuki
 
-Five phases. Phase 0 is a one-line bug fix that can ship today. Phases 2 and 3 depend on a few CLI
+Five phases. Phase 0, a one-line bug fix, shipped on 7 November 2026. Phases 2 and 3 depend on a few CLI
 and `pata-dap` changes in the Asili repo, listed as their own tasks.
 
 ## Roadmap
@@ -25,7 +25,7 @@ flowchart LR
 
 | # | Task | Repo | Covers | Phase | Status |
 | --- | --- | --- | --- | --- | --- |
-| 1 | Change Run Test to `pata jaribu --chuja` | asili-vscode | VS-1 | 0 | Not started |
+| 1 | Change Run Test to `pata jaribu --chuja` | asili-vscode | VS-1 | 0 | Done |
 | 2 | Split `extension.ts` into `tools`, `client`, `commands`, `tasks`, `testing`, `debug`, `statusbar` | asili-vscode | VS-NFR-3 | 1 | Not started |
 | 3 | `resolveTool()` plus "Show tools" command and missing-tool notification | asili-vscode | VS-7, VS-NFR-3 | 1 | Not started |
 | 4 | Localisation: `package.nls.json`, `package.nls.sw.json`, `l10n/` | asili-vscode | VS-NFR-2 | 1 | Not started |

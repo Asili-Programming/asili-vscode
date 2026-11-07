@@ -113,7 +113,7 @@ export function activate(context: ExtensionContext): void {
         testTerminal = window.createTerminal("Asili Tests");
       }
       testTerminal.show(true);
-      testTerminal.sendText(`cd "${root}" && ${pataPath} jaribu --filter "${testName}"`);
+      testTerminal.sendText(`cd "${root}" && ${pataPath} jaribu --chuja "${testName}"`);
     })
   );
 
