@@ -12,7 +12,7 @@ behaviour stays in the Rust servers and the CLI. This document implements the
 ```mermaid
 flowchart LR
   subgraph ext["Extension (TypeScript, esbuild bundle)"]
-    res["tools.ts<br/>resolve pata, pata-lsp, pata-dap, pata-lint"]
+    res["tools.ts<br/>resolve pata, pata-lsp, pata-dap"]
     lsp["client.ts<br/>LanguageClient"]
     cmd["commands.ts<br/>one command per Pata tool"]
     task["tasks.ts<br/>TaskProvider type pata"]
@@ -25,7 +25,6 @@ flowchart LR
   cmd --> cli["pata CLI"]
   task --> cli
   test -- "jaribu --orodha --json, --chuja, --chanjo" --> cli
-  cmd --> lint["pata-lint"]
   res -.-> lsp & dbg & cmd & task & test
 ```
 
@@ -36,8 +35,8 @@ gets the tool path from `tools.ts`, the only place that knows how to find a bina
 
 One function, `resolveTool(name)`, used everywhere (VS-NFR-3):
 
-1. The setting for that tool (`asili.serverPath`, `asili.cliPath`, `asili.linterPath`, new
-   `asili.debuggerPath`).
+1. The setting for that tool (`asili.serverPath`, `asili.cliPath`, new `asili.debuggerPath`).
+   Linting goes through `asili.cliPath` (`pata kagua`); there is no separate linter setting.
 2. The binary bundled in the extension's `bin/` (today `pata-lsp`; `pata-dap` if bundled, PRD open
    question).
 3. The tool on `PATH`.
@@ -78,10 +77,14 @@ tools), which also prints each tool's version.
   snippets.
 - `DebugAdapterDescriptorFactory` returns a `DebugAdapterExecutable` for the resolved `pata-dap`.
 - `contributes.breakpoints` for language `asili`.
-- **Supported today by `pata-dap`:** initialize, launch, setBreakpoints, continue, stackTrace,
-  scopes, variables, disconnect. **Not implemented** (returns an error): next, stepIn, stepOut,
-  pause, evaluate, setVariable, restart, attach. The extension must not advertise what the server
-  refuses; it reads the `initialize` capabilities and the v2 requests land in `pata-dap` first.
+- **Supported by `pata-dap`** (since Asili `9e76e6f`): initialize, launch, setBreakpoints (also
+  during a run), continue, next, stepIn, stepOut (by call depth), pause, stackTrace, scopes,
+  variables, setVariable (scalar locals), evaluate (visible names and literals), restart and
+  disconnect, with `stopped`, `exited`, `terminated` and `output` events. **Refused:** attach
+  (only a debug build launched by the debugger can be debugged); goto, stepBack, reverseContinue,
+  restartFrame, setExpression and terminate are not implemented. **Open gaps:** conditional
+  breakpoints, a one-frame `stackTrace`, and the program's output sharing the DAP stdout stream.
+  The extension reads the `initialize` capabilities and never advertises what the server refuses.
 
 ## CLI requirements this extension depends on
 
@@ -93,8 +96,8 @@ Work in the Asili repo, filed as issues there:
 | Test JSON | Program output mixed into stdout before the JSON | Clean JSON on stdout when `--json` is set |
 | Build diagnostics | `jenga` has no `--json`; unknown flags are passed through silently | `jenga --json` with diagnostics and artifact paths |
 | Coverage format | Human output only | Machine format for `--chanjo` |
-| One entry point for lint | Only the separate `pata-lint` binary | Optional `pata lint` subcommand (PRD open question) |
-| Format flags | `pata-fmt --tofauti` vs `pata nadhifu --diff` | One name for the same flag |
+| One entry point for lint | Done: `pata kagua` (Asili `4bfe016`) | — |
+| Format flags | Done: the `pata-fmt` binary is gone; `pata nadhifu --diff` is the only form | — |
 
 ## Localisation
 

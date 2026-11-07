@@ -51,7 +51,7 @@ Every row must have a surface in v1 unless marked v2. "Today" is what v0.2.0 doe
 | `jaribu --chanjo` | Coverage | None | "Run tests with coverage", shown with the Testing API coverage view |
 | `jaribu --orodha`, `--json` | List tests, machine output | None | Used by the Test Explorer to discover tests |
 | `pata nadhifu` | Format | Via LSP format only | Format document (LSP), command "format project", `--kagua` check |
-| `pata-lint` | Lint | Two commands (terminal) | Diagnostics in Problems, commands kept, `--makosa-tu` setting |
+| `pata kagua` | Lint (replaced the `pata-lint` binary) | Two commands running `pata kagua` in a terminal | Diagnostics in Problems, commands kept, `--makosa-tu` setting |
 | `pata thibitisha` | Verify project | None | Command, task |
 | `pata njozi` | New project (`--maktaba`, `--workspace`, `--kiasi`) | None | Command with quick picks, opens the new folder |
 | `pata ongeza`, `pata ondoa` | Add or remove dependency (`--git`, `--tawi`, `--toleo`) | None | Commands; CodeLens in `pata.toml` |
@@ -67,12 +67,12 @@ code lens, formatting.
 
 ## Scope
 
-**v1:** the coverage table above, the debugger with the requests `pata-dap` implements today,
-Swahili and English localisation, a walkthrough, and publishing to the VS Code Marketplace and Open
-VSX.
+**v1:** the coverage table above, the debugger with everything `pata-dap` implements (breakpoints,
+continue, step over, step in, step out, pause, evaluate, set variable, restart), Swahili and
+English localisation, a walkthrough, and publishing to the VS Code Marketplace and Open VSX.
 
-**v2:** stepping, pause, evaluate and set-variable in the debugger (need `pata-dap` work in the
-Asili repo); `tenda` fallback; a trace visualiser beyond a tree.
+**v2:** `tenda` fallback; a trace visualiser beyond a tree; debugger features `pata-dap` does not
+have yet (conditional breakpoints, a multi-frame call stack, program output in the debug console).
 
 **Out of scope:** other editors (the LSP and DAP servers already serve them); bundling the whole
 Pata CLI inside the extension.
@@ -92,7 +92,7 @@ Pata CLI inside the extension.
 | VS-9 | New project and add dependency are guided with quick picks | Should | v1 |
 | VS-10 | Coverage results shown in the editor | Should | v1 |
 | VS-11 | Trace output shown as a tree view | Could | v1 |
-| VS-12 | Step over, step in, step out, pause, evaluate, set variable | Must | v2 |
+| VS-12 | Step over, step in, step out, pause, evaluate, set variable, restart (all supported by `pata-dap` since Asili `9e76e6f`) | Must | v1 |
 
 ## Non-functional requirements
 
@@ -118,4 +118,6 @@ Pata CLI inside the extension.
 
 - [ ] Bundle `pata-dap` beside `pata-lsp`, or require it on `PATH`?
 - [ ] Marketplace publisher name, and whether to publish under the Asili-Programming org.
-- [ ] Should `pata lint` become a `pata` subcommand so the extension calls one binary for everything?
+
+Settled: linting is the `pata kagua` subcommand (Asili `4bfe016`), so the extension calls one CLI
+for everything; the lint commands already use it and `asili.linterPath` is gone.

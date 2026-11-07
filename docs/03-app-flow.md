@@ -51,7 +51,7 @@ flowchart TD
    signature help.
 2. Save formats the file when `editor.formatOnSave` is on (LSP formatting, same rules as
    `pata nadhifu`).
-3. Lint findings from `pata-lint` appear in Problems; quick fixes come from Mwalimu code actions.
+3. Lint findings from `pata kagua` appear in Problems; quick fixes come from Mwalimu code actions.
 4. Rename, go to definition, find references, symbols and inlay hints work across the project.
 
 ## Flow 3: test
@@ -67,8 +67,10 @@ flowchart TD
    debugs the project's `kuu`).
 2. `pata-dap` launches; execution stops at the breakpoint.
 3. Call stack, scopes and variables appear; Continue runs to the next breakpoint.
-4. v2: step over, step in, step out, pause and the debug console (evaluate) once `pata-dap` supports
-   them. Until then those buttons stay disabled because the server does not advertise them.
+4. Step over, step in and step out move by statement and call depth; Pause stops at the next
+   statement; Restart runs the program again.
+5. The debug console evaluates a visible name or a literal; editing a scalar local in the Variables
+   view sets it for the rest of the run.
 
 ## Flow 5: project maintenance
 

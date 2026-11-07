@@ -40,16 +40,17 @@ flowchart LR
 | 13 | Trace tree view from `--fuatilia=json` | asili-vscode | VS-11 | 2 | Not started |
 | 14 | Debug type `asili`, launch configurations, breakpoints contribution | asili-vscode | VS-5 | 3 | Not started |
 | 15 | Bundle or resolve `pata-dap`; decide bundling | asili-vscode | VS-5 | 3 | Not started |
-| 16 | `pata-dap`: next, stepIn, stepOut, pause | Asili | VS-12 | 3 | Not started |
-| 17 | `pata-dap`: evaluate, setVariable, restart | Asili | VS-12 | 3 | Not started |
+| 16 | `pata-dap`: next, stepIn, stepOut, pause | Asili | VS-12 | 3 | Done (Asili `9e76e6f`) |
+| 17 | `pata-dap`: evaluate, setVariable, restart | Asili | VS-12 | 3 | Done (Asili `9e76e6f`) |
 | 18 | Walkthrough (five steps) with screenshots | asili-vscode | VS-8 | 4 | Not started |
 | 19 | Extension and file icons from the vector logo | asili-vscode | Design Brief | 4 | Not started |
 | 20 | Integration tests with `@vscode/test-electron` in CI | asili-vscode | VS-NFR-6 | 4 | Not started |
 | 21 | Marketplace README (Swahili first) and GIF | asili-vscode | Design Brief | 4 | Not started |
 | 22 | Publish per platform to Marketplace and Open VSX | asili-vscode | Scope | 4 | Not started |
 
-Tasks 16 and 17 are v2 in the PRD; they sit in Phase 3 so the debugger work stays together, but v1
-can ship without them.
+Tasks 16 and 17 landed in the Asili repo on 7 November 2026, so the extension's debugger (task 14)
+can expose stepping, pause, evaluate, set variable and restart from its first release. The lint
+commands already run `pata kagua` (asili-vscode `b713090`).
 
 ## Decisions needed
 
@@ -57,7 +58,7 @@ can ship without them.
 | --- | --- | --- |
 | Bundle `pata-dap` in the extension | Task 15 | Yes, same as `pata-lsp`, per platform |
 | Publisher and namespace | Task 22 | One publisher for the Asili-Programming org |
-| `pata lint` subcommand | Task 6 (lint commands) | Yes; keeps one CLI for the extension to call |
+| Lint through the CLI | Task 6 (lint commands) | Decided: `pata kagua` (Asili `4bfe016`) |
 
 ## Launch checklist
 
