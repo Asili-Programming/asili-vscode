@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- Moved out of the Asili repository (`extensions/vscode/`) into its own,
+  `Asili-Programming/asili-vscode`. `npm run build-lsp` builds the bundled `pata-lsp` from an
+  Asili checkout instead of a binary kept in git.
 - Added snippets for grouped `weka`/`thabiti` declarations.
 - Documented that builtin standard-library functions are ambient and do not require `leta`.
 - Added current-file and workspace lint commands backed by the globally installed `pata-lint`,

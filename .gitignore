@@ -1,0 +1,6 @@
+node_modules/
+*.vsix
+# pata-lsp, built from an Asili checkout by scripts/build-lsp.sh
+bin/
+# TypeDoc output (npm run typedoc in docs-tooling/)
+docs-site/

@@ -3,3 +3,7 @@ src/**
 tsconfig.json
 esbuild.js
 out/extension.js.map
+scripts/**
+docs-tooling/**
+docs-site/**
+.github/**

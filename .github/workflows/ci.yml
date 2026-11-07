@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # The grammar's word lists are generated from Asili's compiler, which changes on its own
+  # schedule: check weekly against Asili's develop so drift shows up without a push here.
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Type-check, bundle, word lists
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Check out Asili
+        uses: actions/checkout@v4
+        with:
+          repository: Asili-Programming/Asili
+          ref: develop
+          path: .asili
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - run: npm ci
+      - run: npm run compile
+
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: .asili
+
+      - name: Grammar word lists match the compiler's
+        working-directory: .asili
+        env:
+          ASILI_VSCODE_DIR: ${{ github.workspace }}
+        run: cargo test -p pata-core --test editor_word_lists

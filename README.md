@@ -1,6 +1,6 @@
-![Asili Banner](https://raw.githubusercontent.com/Asili-Programming/Asili/main/extensions/vscode/assets/Asili_Banner.png)
+![Asili Banner](https://raw.githubusercontent.com/Asili-Programming/asili-vscode/main/assets/Asili_Banner.png)
 
-# <img src="https://raw.githubusercontent.com/Asili-Programming/Asili/main/extensions/vscode/assets/Asili_Logo.png" alt="" width="40" valign="middle" /> Asili Language Support
+# <img src="https://raw.githubusercontent.com/Asili-Programming/asili-vscode/main/assets/Asili_Logo.png" alt="" width="40" valign="middle" /> Asili Language Support
 
 Syntax highlighting and full language server support (Mwalimu) for the Asili language
 (`.as`, `.asi`), plus syntax highlighting for `pata.toml`/`pata.lock` project manifests.
@@ -71,7 +71,8 @@ on your PATH:
 }
 ```
 
-For the complete global toolchain, install the CLI, language server, and linter with Cargo:
+For the complete global toolchain, install the CLI, language server, and linter with Cargo,
+from a clone of [Asili](https://github.com/Asili-Programming/Asili):
 
 ```bash
 cargo install --path pata/cli --bin pata-cli --force
@@ -86,10 +87,26 @@ Cross-file features (diagnostics, go to definition, references, workspace symbol
 `pata.toml` at your workspace root to know what your project's files and dependencies are —
 without one, everything still works for a single open file, just without the cross-file parts.
 
-Build `pata` from source:
+## Building the extension
+
+The extension lives in its own repository; the language server it bundles is built from an
+[Asili](https://github.com/Asili-Programming/Asili) checkout, by default a sibling clone:
 
 ```bash
-cargo build -p pata-cli
+git clone https://github.com/Asili-Programming/Asili ../Asili   # or set ASILI_DIR
+npm install
+npm run build-lsp      # cargo build -p pata-lsp, copied to bin/pata-lsp
+npm run compile        # type-check + esbuild bundle into out/
 ```
 
-See the [project README](../../README.md) for full build instructions.
+- **Development:** open this folder in VS Code and run **Run Extension** (F5) for an Extension
+  Development Host.
+- **Package and install:** `npx @vscode/vsce package --no-dependencies`, then
+  `code --install-extension asili-<version>.vsix`.
+- **API docs:** `cd docs-tooling && npm install && npm run typedoc` (output in
+  `docs-site/typedoc/`; published to GitHub Pages on every push to `main`). TypeDoc is isolated
+  in `docs-tooling/` with its own TypeScript (`^5.9`), because its peer-dependency range doesn't
+  cover the extension's (`^7.0`) yet.
+- **Word lists:** the grammar's builtin type and function lists are generated from Asili's
+  compiler. CI checks them against Asili's `develop`; to regenerate, from the Asili checkout:
+  `ASILI_VSCODE_DIR=<this repo> ASILI_GOLDEN=write cargo test -p pata-core --test editor_word_lists`.
