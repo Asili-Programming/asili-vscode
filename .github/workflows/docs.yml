@@ -27,7 +27,7 @@ jobs:
       - name: TypeDoc (isolated in docs-tooling/)
         working-directory: docs-tooling
         run: npm ci && npm run typedoc
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: docs-site/typedoc
 
