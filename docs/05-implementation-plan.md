@@ -34,7 +34,7 @@ flowchart LR
 | 7 | `pata` task type and provider | asili-vscode | VS-4 | 2 | Not started |
 | 8 | Test Explorer via `jaribu --orodha --json` and `--chuja` | asili-vscode | VS-3 | 2 | Not started |
 | 9 | Coverage view from `jaribu --chanjo` | asili-vscode | VS-10 | 2 | Not started |
-| 10 | Every `pata` command answers `--msaada` | Asili | VS-2 | 2 | Not started |
+| 10 | Every `pata` command answers `--msaada` | Asili | VS-2 | 2 | Done (Asili `776dcaf`) |
 | 11 | Clean JSON from `jaribu --json`; machine format for `--chanjo` | Asili | VS-3, VS-10 | 2 | Not started |
 | 12 | `jenga --json` and an error on unknown flags | Asili | VS-NFR-4 | 2 | Not started |
 | 13 | Trace tree view from `--fuatilia=json` | asili-vscode | VS-11 | 2 | Not started |

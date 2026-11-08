@@ -92,7 +92,7 @@ Work in the Asili repo, filed as issues there:
 
 | Need | Today | Required |
 | --- | --- | --- |
-| Help for every command | `jaribu`, `njozi`, `nadhifu`, `thibitisha` reject `--msaada`; `ongeza`/`ondoa` fail before help without a `pata.toml` | Every command answers `--msaada` |
+| Help for every command | Done: every command answers `--msaada` (Asili `776dcaf`) | — |
 | Test JSON | Program output mixed into stdout before the JSON | Clean JSON on stdout when `--json` is set |
 | Build diagnostics | `jenga` has no `--json`; unknown flags are passed through silently | `jenga --json` with diagnostics and artifact paths |
 | Coverage format | Human output only | Machine format for `--chanjo` |
