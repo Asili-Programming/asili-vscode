@@ -4,7 +4,7 @@
   "description": "Asili language support: syntax highlighting and LSP (Mwalimu)",
   "version": "0.2.0",
   "publisher": "asili",
-  "license": "GPL-2.0",
+  "license": "Apache-2.0",
   "icon": "assets/Asili_Logo.png",
   "repository": {
     "type": "git",
