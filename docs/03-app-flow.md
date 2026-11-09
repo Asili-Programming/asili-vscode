@@ -1,6 +1,6 @@
 # Asili VS Code extension — App Flow
 
-As of 7 November 2026 · Victor Kaiuki
+As of 9 November 2026 · Victor Kaiuki
 
 A developer opens a folder, sees Mwalimu start in the status bar, and from then on reaches every
 Pata tool from the Command Palette, CodeLens, the Test Explorer, Run Task or F5.
@@ -57,9 +57,10 @@ flowchart TD
 ## Flow 3: test
 
 1. The Test Explorer lists tests found by `pata jaribu --orodha --json`.
-2. Run one test (CodeLens or explorer): `pata jaribu --json --chuja <name>`; pass or fail shows inline
-   with the message.
-3. **Run with coverage**: `pata jaribu --chanjo`; covered lines are marked in the editor.
+2. Run one test (CodeLens or explorer): `pata jaribu --json --chuja <name>`; pass or fail appears
+   in the Testing view with the failure message.
+3. **Run with coverage**: `pata jaribu --chanjo --json`; aggregate line counts and percentage
+   appear in task output. Per-line editor decorations await line-level CLI output.
 
 ## Flow 4: debug
 
@@ -81,8 +82,8 @@ flowchart TD
 - **Nadhifisha mradi**: `pata nadhifu` on the whole project; **Kagua mpangilio** runs `--kagua` and
   lists unformatted files.
 - **Fungua REPL**: a terminal running `pata repl`.
-- **Endesha kwa ufuatiliaji**: `pata jenga --tenda --fuatilia=json:<file>`, then the trace opens as a
-  tree view (or `pata fuatilia <file>` in a terminal until the tree view lands).
+- **Endesha kwa ufuatiliaji**: choose a trace file; the extension enables binary tracing for the
+  build and run, then opens the decoded frames in the Asili Trace tree.
 
 ## Error states
 

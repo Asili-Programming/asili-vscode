@@ -1,6 +1,6 @@
 # Asili VS Code extension — Product Requirements Document
 
-As of 7 November 2026 · Victor Kaiuki
+As of 9 November 2026 · Victor Kaiuki
 
 Every Pata tool and every Mwalimu (LSP) feature should be reachable from VS Code without opening a
 terminal: from the Command Palette, the status bar, CodeLens, tasks and the debugger. Today the
@@ -46,9 +46,9 @@ Every row must have a surface in v1 unless marked v2. "Today" is what v0.2.0 doe
 | `jenga --workspace-info` | Workspace members | None | Command, shown in an output panel |
 | `jenga --muda` | Phase timings | None | Command option |
 | `pata tenda` | Run a built `.asb` | None | Explorer context menu on `.asb` files |
-| `--fuatilia`, `pata fuatilia` | Trace build and run; read a trace | None | Command "run with trace", trace opened as a tree view |
+| `--fuatilia`, `pata fuatilia` | Trace build and run; read a trace | None | Command "run with trace", saved trace opened as a tree view |
 | `pata jaribu` | Run tests | Run Test CodeLens (terminal) | Testing API (Test Explorer), CodeLens per test, `--chuja` |
-| `jaribu --chanjo` | Coverage | None | "Run tests with coverage", shown with the Testing API coverage view |
+| `jaribu --chanjo --json` | Coverage summary | None | "Run tests with coverage", structured summary in task output |
 | `jaribu --orodha`, `--json` | List tests, machine output | None | Used by the Test Explorer to discover tests |
 | `pata nadhifu` | Format | Via LSP format only | Format document (LSP), command "format project", `--kagua` check |
 | `pata kagua` | Lint (replaced the `pata-lint` binary) | Two commands running `pata kagua` in a terminal | Diagnostics in Problems, commands kept, `--makosa-tu` setting |
@@ -90,7 +90,7 @@ Pata CLI inside the extension.
 | VS-7 | When `pata` or a tool is missing, one notification explains how to install it, with a link | Must | v1 |
 | VS-8 | A walkthrough introduces run, test, debug, format, lint and each LSP feature | Should | v1 |
 | VS-9 | New project and add dependency are guided with quick picks | Should | v1 |
-| VS-10 | Coverage results shown in the editor | Should | v1 |
+| VS-10 | Aggregate coverage summary shown in task output | Should | v1 |
 | VS-11 | Trace output shown as a tree view | Could | v1 |
 | VS-12 | Step over, step in, step out, pause, evaluate, set variable, restart (all supported by `pata-dap` since Asili `9e76e6f`) | Must | v1 |
 
@@ -114,10 +114,11 @@ Pata CLI inside the extension.
 | Marketplace and Open VSX installs | Publisher dashboards | Tracked from first publish |
 | Open bugs labelled `vscode` older than 30 days | GitHub issues | 0 |
 
-## Open questions
+## Decisions
 
-- [ ] Bundle `pata-dap` beside `pata-lsp`, or require it on `PATH`?
-- [ ] Marketplace publisher name, and whether to publish under the Asili-Programming org.
-
-Settled: linting is the `pata kagua` subcommand (Asili `4bfe016`), so the extension calls one CLI
-for everything; the lint commands already use it and `asili.linterPath` is gone.
+- Bundle `pata-dap` per platform. Allow `asili.debuggerPath` to override the bundled binary, with
+  `PATH` as a fallback.
+- Keep the existing `asili` Marketplace publisher; do not migrate publisher ownership as part of
+  this work.
+- Use `pata kagua` when the selected CLI provides it; otherwise use `pata-lint` through
+  `asili.linterPath` for compatibility with older installations.

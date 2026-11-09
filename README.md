@@ -50,20 +50,49 @@ Syntax highlighting and full language server support (Mwalimu) for the Asili lan
 - Re-checked automatically when a `.as`/`pata.toml`/`pata.lock` file changes on disk — including
   edits made outside the editor.
 
+## Mzunguko wa Pata / Pata workflow
+
+Tumia Command Palette, vitufe vya CodeLens, mwonekano wa Testing, status bar na F5 bila kuandika
+amri za kawaida za Pata kwenye terminal:
+
+- Unda mradi wa programu, maktaba au workspace; ongeza au ondoa tegemezi.
+- Jenga na endesha mradi au faili moja, chagua lengo (`native`, `wasm`, `cortex-m`, `esp32`),
+  kagua wanachama wa workspace, endesha `.asb`, au fungua REPL.
+- Gundua na endesha majaribio kwenye Testing; endesha chanjo na uone muhtasari wa JSON kwenye
+  terminali ya kazi.
+- Nadhifisha na kagua mpangilio wa mradi; kagua faili au workspace na uthibitishe mradi.
+- Endesha programu kwa ufuatiliaji na uchunguze faili ya ufuatiliaji kama mti.
+- Weka kituo cha kusimama na ubonyeze F5: pata-dap hutoa kusimama, kuendelea, kupiga hatua,
+  stack trace na vigeu.
+- Status bar huonyesha hali ya Mwalimu na lengo la kujenga; walkthrough huongoza mtumiaji mpya.
+
+Use the Command Palette, CodeLens, Testing view, status bar, and F5 for common Pata workflows,
+without typing routine CLI commands:
+
+- Create an application, library, or workspace; add or remove dependencies.
+- Build and run a project or a single file, select a target (`native`, `wasm`, `cortex-m`,
+  `esp32`), inspect workspace members, run an `.asb`, or open the REPL.
+- Discover and run tests in Testing; run coverage and inspect its JSON summary in task output.
+- Format and check project formatting; lint a file or workspace and verify the project.
+- Run with tracing and inspect a binary trace as a tree.
+- Set a breakpoint and press F5: pata-dap supports pause, continue, stepping, stack trace, and
+  variables.
+- The status bar shows Mwalimu state and the build target; the walkthrough guides new users.
+
 ## Setup
 
-The extension starts `pata mwalimu` as the language server. Make sure `pata` is on your PATH, or set a custom path in workspace settings:
+The extension prefers a bundled `pata-lsp`, then starts `pata mwalimu` from `PATH`. Set a custom
+language-server path only when needed:
 
 ```json
 {
-  "asili.serverPath": "/path/to/pata-cli",
-  "asili.serverArgs": ["mwalimu"]
+  "asili.serverPath": "/path/to/pata-lsp",
+  "asili.serverArgs": []
 }
 ```
 
-The "Run Test" code lens shells out to the `pata` CLI separately from the language server (which
-may be a bundled `pata-lsp` binary with no sibling `pata`) — set `asili.cliPath` if `pata` isn't
-on your PATH:
+Install the Pata CLI for builds, tests, and project commands. `asili.cliPath` selects the CLI if it
+isn't on your PATH:
 
 ```json
 {
@@ -71,16 +100,20 @@ on your PATH:
 }
 ```
 
-For the complete global toolchain, install the CLI (which includes the linter, `pata kagua`) and language server with Cargo,
-from a clone of [Asili](https://github.com/Asili-Programming/Asili):
+For the complete toolchain, install the CLI, language server, debugger and (where the CLI does not
+include `pata kagua`) the standalone linter with Cargo from a clone of
+[Asili](https://github.com/Asili-Programming/Asili):
 
 ```bash
 cargo install --path pata/cli --bin pata-cli --force
 cargo install --path pata/lsp --bin pata-lsp --force
+cargo install --path pata/dap --bin pata-dap --force
+cargo install --path pata/lint --bin pata-lint --force
 ```
 
 Ensure `~/.cargo/bin` is on `PATH`. If the tools are installed elsewhere, set
-`asili.serverPath` and `asili.cliPath` to their absolute paths.
+`asili.serverPath`, `asili.cliPath`, `asili.debuggerPath`, and `asili.linterPath` to their absolute
+paths. The extension uses `pata kagua` when available and falls back to `pata-lint`.
 
 Cross-file features (diagnostics, go to definition, references, workspace symbols) need a
 `pata.toml` at your workspace root to know what your project's files and dependencies are —
@@ -93,15 +126,16 @@ The extension lives in its own repository; the language server it bundles is bui
 
 ```bash
 git clone https://github.com/Asili-Programming/Asili ../Asili   # or set ASILI_DIR
-npm install
-npm run build-lsp      # cargo build -p pata-lsp, copied to bin/pata-lsp
+npm ci
+npm run build-tools    # builds pata-lsp and pata-dap into bin/<platform>-<arch>/
 npm run compile        # type-check + esbuild bundle into out/
+npm test               # manifest checks + VS Code extension-host integration tests
 ```
 
 - **Development:** open this folder in VS Code and run **Run Extension** (F5) for an Extension
   Development Host.
-- **Package and install:** `npx @vscode/vsce package --no-dependencies`, then
-  `code --install-extension asili-<version>.vsix`.
+- **Package and install:** `npm run package`, then
+  `code --install-extension asili-<version>.vsix --force`.
 - **API docs:** `cd docs-tooling && npm install && npm run typedoc` (output in
   `docs-site/typedoc/`; published to GitHub Pages on every push to `main`). TypeDoc is isolated
   in `docs-tooling/` with its own TypeScript (`^5.9`), because its peer-dependency range doesn't
@@ -109,3 +143,8 @@ npm run compile        # type-check + esbuild bundle into out/
 - **Word lists:** the grammar's builtin type and function lists are generated from Asili's
   compiler. CI checks them against Asili's `develop`; to regenerate, from the Asili checkout:
   `ASILI_VSCODE_DIR=<this repo> ASILI_GOLDEN=write cargo test -p pata-core --test editor_word_lists`.
+
+## License
+
+The original extension code is licensed under GNU GPL v2.0 only; see [LICENSE](LICENSE).
+Third-party components and assets retain the licenses and notices shipped with them.

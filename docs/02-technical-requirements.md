@@ -1,6 +1,6 @@
 # Asili VS Code extension — Technical Requirements Document
 
-As of 7 November 2026 · Victor Kaiuki
+As of 9 November 2026 · Victor Kaiuki
 
 The extension stays a thin client: it resolves Pata tools, starts Mwalimu over LSP and `pata-dap`
 over DAP, and turns every other Pata command into a command, task or test run. All language
@@ -35,10 +35,10 @@ gets the tool path from `tools.ts`, the only place that knows how to find a bina
 
 One function, `resolveTool(name)`, used everywhere (VS-NFR-3):
 
-1. The setting for that tool (`asili.serverPath`, `asili.cliPath`, new `asili.debuggerPath`).
-   Linting goes through `asili.cliPath` (`pata kagua`); there is no separate linter setting.
-2. The binary bundled in the extension's `bin/` (today `pata-lsp`; `pata-dap` if bundled, PRD open
-   question).
+1. The setting for that tool (`asili.serverPath`, `asili.cliPath`, `asili.debuggerPath`, and
+   `asili.linterPath` for the standalone compatibility fallback).
+2. The binary bundled in the extension's `bin/` (today `pata-lsp`; `pata-dap` is bundled per
+   platform).
 3. The tool on `PATH`.
 4. Otherwise one notification (VS-7) naming the missing tool and linking to the install page.
 
@@ -66,8 +66,9 @@ tools), which also prints each tool's version.
   preceded by the tests' own printed output on stdout, so the result cannot be parsed reliably. The
   CLI must print test output on stderr, or inside the JSON, when `--json` is set (issue in the Asili
   repo).
-- Coverage runs `pata jaribu --chanjo` and maps the result to `FileCoverage` (Testing API coverage).
-  **CLI requirement:** a machine-readable coverage format (for example `--chanjo=json` or LCOV).
+- Coverage runs `pata jaribu --chanjo --json` and presents aggregate line counts in task output.
+  The current CLI JSON has no per-file line map, so the extension does not fabricate editor
+  coverage decorations. Add Testing API `FileCoverage` only after the CLI exposes line-level data.
 - The Mwalimu code lens for tests stays, but calls the Testing API instead of a terminal.
 
 ## Debugger
@@ -76,6 +77,8 @@ tools), which also prints each tool's version.
   `program` (default: the project in the workspace), `args`, `cwd`, and initial configurations and
   snippets.
 - `DebugAdapterDescriptorFactory` returns a `DebugAdapterExecutable` for the resolved `pata-dap`.
+  Bundle it per platform; `asili.debuggerPath` can override the bundled binary, with `PATH` as a
+  fallback.
 - `contributes.breakpoints` for language `asili`.
 - **Supported by `pata-dap`** (since Asili `9e76e6f`): initialize, launch, setBreakpoints (also
   during a run), continue, next, stepIn, stepOut (by call depth), pause, stackTrace, scopes,
@@ -95,8 +98,8 @@ Work in the Asili repo, filed as issues there:
 | Help for every command | Done: every command answers `--msaada` (Asili `776dcaf`) | — |
 | Test JSON | Program output mixed into stdout before the JSON | Clean JSON on stdout when `--json` is set |
 | Build diagnostics | `jenga` has no `--json`; unknown flags are passed through silently | `jenga --json` with diagnostics and artifact paths |
-| Coverage format | Human output only | Machine format for `--chanjo` |
-| One entry point for lint | Done: `pata kagua` (Asili `4bfe016`) | — |
+| Coverage format | `jaribu --chanjo --json` reports aggregate line counts and percentage | Per-file executed-line data before editor coverage decorations |
+| Lint entry point | `pata kagua` when available; current standalone CLI has `pata-lint` | Detect `kagua`; otherwise use `asili.linterPath` |
 | Format flags | Done: the `pata-fmt` binary is gone; `pata nadhifu --diff` is the only form | — |
 
 ## Localisation

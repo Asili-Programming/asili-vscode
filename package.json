@@ -1,8 +1,8 @@
 {
   "name": "asili",
   "displayName": "Asili",
-  "description": "Asili language support: syntax highlighting and LSP (Mwalimu)",
-  "version": "0.2.0",
+  "description": "Asili language support and Pata project workflows: build, run, test, debug, and more.",
+  "version": "0.3.0",
   "publisher": "asili",
   "license": "GPL-2.0-only",
   "icon": "assets/Asili_Logo.png",
@@ -20,6 +20,11 @@
     "Programming Languages"
   ],
   "main": "./out/extension.js",
+  "activationEvents": [
+    "onLanguage:asili",
+    "onLanguage:pata-manifest",
+    "workspaceContains:pata.toml"
+  ],
   "contributes": {
     "languages": [
       {
@@ -31,6 +36,10 @@
           ".as",
           ".asi"
         ],
+        "icon": {
+          "light": "./assets/Asili_Logo.png",
+          "dark": "./assets/Asili_Logo.png"
+        },
         "configuration": "./language-configuration.json"
       },
       {
@@ -68,51 +77,340 @@
       "properties": {
         "asili.serverPath": {
           "type": "string",
-          "default": "pata",
-          "description": "Path to pata or pata-lsp binary for LSP"
+          "default": "",
+          "description": "%setting.serverPath%"
         },
         "asili.serverArgs": {
           "type": "array",
-          "default": [
-            "mwalimu"
-          ],
-          "description": "Arguments for LSP (e.g. [\"mwalimu\"] when using pata)"
+          "default": [],
+          "description": "%setting.serverArgs%"
         },
         "asili.cliPath": {
           "type": "string",
           "default": "pata",
-          "description": "Path to the pata CLI binary, used by \"Run Test\" code lenses and the lint commands (`pata kagua`). Separate from asili.serverPath since that may point at a bundled pata-lsp with no sibling pata binary."
+          "description": "%setting.cliPath%"
+        },
+        "asili.linterPath": {
+          "type": "string",
+          "default": "pata-lint",
+          "description": "%setting.linterPath%"
+        },
+        "asili.debuggerPath": {
+          "type": "string",
+          "default": "",
+          "description": "%setting.debuggerPath%"
         }
       }
     },
     "commands": [
       {
         "command": "asili.runTest",
-        "title": "Asili: Run Test"
+        "title": "%command.runTest%",
+        "category": "Asili"
       },
       {
         "command": "asili.lintFile",
-        "title": "Asili: Lint Current File"
+        "title": "%command.lintFile%",
+        "category": "Asili"
       },
       {
         "command": "asili.lintWorkspace",
-        "title": "Asili: Lint Workspace"
+        "title": "%command.lintWorkspace%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.build",
+        "title": "%command.build%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.buildTimings",
+        "title": "%command.buildTimings%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.run",
+        "title": "%command.run%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.runWithTrace",
+        "title": "%command.runWithTrace%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.selectTarget",
+        "title": "%command.selectTarget%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.selectMode",
+        "title": "%command.selectMode%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.test",
+        "title": "%command.test%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.testCoverage",
+        "title": "%command.testCoverage%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.formatProject",
+        "title": "%command.formatProject%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.formatCheck",
+        "title": "%command.formatCheck%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.verify",
+        "title": "%command.verify%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.newProject",
+        "title": "%command.newProject%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.addDependency",
+        "title": "%command.addDependency%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.removeDependency",
+        "title": "%command.removeDependency%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.repl",
+        "title": "%command.repl%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.workspaceInfo",
+        "title": "%command.workspaceInfo%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.runArtifact",
+        "title": "%command.runArtifact%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.openTrace",
+        "title": "%command.openTrace%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.showTools",
+        "title": "%command.showTools%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.restartServer",
+        "title": "%command.restartServer%",
+        "category": "Asili"
+      },
+      {
+        "command": "asili.debug",
+        "title": "%command.debug%",
+        "category": "Asili"
       }
-    ]
+    ],
+    "taskDefinitions": [
+      {
+        "type": "pata",
+        "required": [
+          "args"
+        ],
+        "properties": {
+          "args": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "%task.args%"
+          },
+          "cwd": {
+            "type": "string",
+            "description": "%task.cwd%"
+          },
+          "label": {
+            "type": "string",
+            "description": "%task.label%"
+          }
+        }
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "asili",
+        "label": "Asili",
+        "languages": [
+          "asili"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "%debug.program%"
+              },
+              "args": {
+                "type": "array",
+                "default": [],
+                "description": "%debug.args%"
+              },
+              "cwd": {
+                "type": "string",
+                "default": "${workspaceFolder}",
+                "description": "%debug.cwd%"
+              }
+            }
+          }
+        },
+        "initialConfigurations": [
+          {
+            "type": "asili",
+            "request": "launch",
+            "name": "%debug.launchName%",
+            "program": "${workspaceFolder}/src/kuu.as",
+            "cwd": "${workspaceFolder}",
+            "args": []
+          }
+        ]
+      }
+    ],
+    "breakpoints": [
+      {
+        "language": "asili"
+      }
+    ],
+    "walkthroughs": [
+      {
+        "id": "asili.gettingStarted",
+        "title": "%walkthrough.title%",
+        "description": "%walkthrough.description%",
+        "steps": [
+          {
+            "id": "project",
+            "title": "%walkthrough.project.title%",
+            "description": "%walkthrough.project.description%",
+            "media": {
+              "markdown": "docs/walkthrough/project.md"
+            },
+            "completionEvents": [
+              "onCommand:asili.newProject"
+            ]
+          },
+          {
+            "id": "run",
+            "title": "%walkthrough.run.title%",
+            "description": "%walkthrough.run.description%",
+            "media": {
+              "markdown": "docs/walkthrough/run.md"
+            },
+            "completionEvents": [
+              "onCommand:asili.run"
+            ]
+          },
+          {
+            "id": "test",
+            "title": "%walkthrough.test.title%",
+            "description": "%walkthrough.test.description%",
+            "media": {
+              "markdown": "docs/walkthrough/test.md"
+            },
+            "completionEvents": [
+              "onCommand:asili.test"
+            ]
+          },
+          {
+            "id": "debug",
+            "title": "%walkthrough.debug.title%",
+            "description": "%walkthrough.debug.description%",
+            "media": {
+              "markdown": "docs/walkthrough/debug.md"
+            },
+            "completionEvents": [
+              "onCommand:asili.debug"
+            ]
+          },
+          {
+            "id": "language",
+            "title": "%walkthrough.language.title%",
+            "description": "%walkthrough.language.description%",
+            "media": {
+              "markdown": "docs/walkthrough/language.md"
+            },
+            "completionEvents": [
+              "onLanguage:asili"
+            ]
+          }
+        ]
+      }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "asili.run",
+          "when": "editorLangId == asili",
+          "group": "navigation"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "asili.runArtifact",
+          "when": "resourceExtname == .asb",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.newProject",
+          "when": "explorerResourceIsFolder",
+          "group": "navigation"
+        }
+      ]
+    },
+    "views": {
+      "explorer": [
+        {
+          "id": "asili.trace",
+          "name": "%view.trace%"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run check-types && npm run bundle",
     "check-types": "tsc -p ./ --noEmit",
     "bundle": "node esbuild.js",
     "compile": "npm run check-types && npm run bundle",
+    "test": "node --test tests/manifest.test.cjs && node ./tests/runTests.js",
+    "package": "vsce package --no-dependencies",
+    "build-tools": "bash scripts/build-tools.sh",
     "build-lsp": "bash scripts/build-lsp.sh",
     "watch": "node esbuild.js --watch"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "@types/vscode": "^1.145.0",
+    "@vscode/test-electron": "^3.1.0",
+    "@vscode/vsce": "^4.1.0",
     "esbuild": "^0.28.2",
     "typescript": "^7.0.2"
+  },
+  "overrides": {
+    "minimatch": "^11.0.1"
   },
   "dependencies": {
     "vscode-languageclient": "^11.0.0"

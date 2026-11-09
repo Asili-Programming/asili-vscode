@@ -1,16 +1,34 @@
 # Changelog
 
-## Unreleased
+## [Unreleased]
+
+## [0.3.0]
+
+### Added
+
+- Added Command Palette and task workflows for project creation, build/run and target selection,
+  tests and coverage summary, formatting, lint, verification, dependencies, REPL, artifacts,
+  workspaces, and trace inspection.
+- Added the VS Code Testing API, an Asili entry-point run/debug CodeLens, a trace tree, a Pata
+  status bar, an onboarding walkthrough, Swahili localization, and a DAP debugger factory.
+- Added `npm run package` to create a self-contained VSIX with platform-specific `pata-lsp` and
+  `pata-dap` binaries, plus extension-host tests and a `pata-lint` fallback when the selected CLI
+  does not expose `kagua`.
+- Added snippets for grouped `weka`/`thabiti` declarations.
+
+### Changed
 
 - Requires VS Code 1.145 or newer (`engines.vscode` `^1.145.0`, matching `@types/vscode`);
   `vscode-languageclient` 11.
 - Moved out of the Asili repository (`extensions/vscode/`) into its own,
   `Asili-Programming/asili-vscode`. `npm run build-lsp` builds the bundled `pata-lsp` from an
   Asili checkout instead of a binary kept in git.
-- Added snippets for grouped `weka`/`thabiti` declarations.
 - Documented that builtin standard-library functions are ambient and do not require `leta`.
 - Added current-file and workspace lint commands, running `pata kagua` through the
   `asili.cliPath` CLI.
+
+### Fixed
+
 - Fixed Run Test: it passed `--filter`, which `pata jaribu` rejects; it now passes `--chuja`.
 
 All notable changes to the Asili VS Code extension are recorded here. The format is based on

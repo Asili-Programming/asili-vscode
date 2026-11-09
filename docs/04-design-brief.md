@@ -1,6 +1,6 @@
 # Asili VS Code extension — Design Brief
 
-As of 7 November 2026 · Victor Kaiuki
+As of 9 November 2026 · Victor Kaiuki
 
 The extension should feel native to VS Code: theme colours, codicons and VS Code's own patterns.
 Asili's identity shows in three places only: the extension icon, the file icon and the words.
@@ -85,3 +85,6 @@ Images are real screenshots in light and dark themes, under 200 KB each.
 The extension README becomes the Marketplace page: one-line description, a 20-second GIF of run,
 test and debug, the tool coverage table, settings, and a link to the wiki's Editor Support page.
 Swahili first, English below.
+
+Keep the existing `asili` Marketplace publisher for this release; do not migrate publisher
+ownership as part of the feature work.
