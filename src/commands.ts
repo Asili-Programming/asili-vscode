@@ -1,3 +1,4 @@
+import { execFile } from "child_process";
 import * as path from "path";
 import * as fs from "fs";
 import {
@@ -6,6 +7,8 @@ import {
   debug,
   ExtensionContext,
   l10n,
+  OutputChannel,
+  ProgressLocation,
   tasks,
   TaskProvider,
   TaskDefinition,
@@ -14,6 +17,7 @@ import {
   window,
   workspace,
 } from "vscode";
+import { resolveCli } from "./tools";
 import {
   activeProjectRoot,
   createLintTask,
@@ -26,7 +30,9 @@ const taskCommands: Array<{ label: string; args: string[] }> = [
   { label: "Build project", args: ["jenga"] },
   { label: "Build and run", args: ["jenga", "--tenda"] },
   { label: "Run tests", args: ["jaribu"] },
+  { label: "Run tests with coverage", args: ["jaribu", "--chanjo", "--json"] },
   { label: "Format project", args: ["nadhifu"] },
+  { label: "Check formatting", args: ["nadhifu", "--kagua", "--json"] },
   { label: "Verify project", args: ["thibitisha"] },
 ];
 
@@ -113,6 +119,114 @@ async function executePataAndWait(args: string[], label: string, cwd?: string): 
   } catch (error) {
     listener?.dispose();
     throw error;
+  }
+}
+
+interface CoverageReport {
+  jumla: number;
+  sawa: number;
+  kosa: number;
+  chanjo: {
+    mistari_jumla: number;
+    mistari_yaliyotimizwa: number;
+    asilimia: number;
+  };
+}
+
+function parseCoverageReport(value: string): CoverageReport {
+  const parsed = JSON.parse(value) as Partial<CoverageReport>;
+  const coverage = parsed.chanjo;
+  if (
+    typeof parsed.jumla !== "number" ||
+    typeof parsed.sawa !== "number" ||
+    typeof parsed.kosa !== "number" ||
+    !Number.isInteger(parsed.jumla) ||
+    !Number.isInteger(parsed.sawa) ||
+    !Number.isInteger(parsed.kosa) ||
+    !coverage ||
+    !Number.isInteger(coverage.mistari_jumla) ||
+    !Number.isInteger(coverage.mistari_yaliyotimizwa) ||
+    typeof coverage.asilimia !== "number" ||
+    !Number.isFinite(coverage.asilimia) ||
+    parsed.jumla !== parsed.sawa + parsed.kosa ||
+    coverage.mistari_yaliyotimizwa > coverage.mistari_jumla ||
+    coverage.asilimia < 0 ||
+    coverage.asilimia > 100
+  ) {
+    throw new Error(l10n.t("Pata returned invalid coverage results"));
+  }
+  return parsed as CoverageReport;
+}
+
+async function showCoverageReport(output: OutputChannel): Promise<void> {
+  if (!(await ensurePataAvailable())) {
+    return;
+  }
+  const root = activeProjectRoot();
+  if (!root || !fs.existsSync(path.join(root, "pata.toml"))) {
+    void window.showWarningMessage(l10n.t("Open a Pata project first"));
+    return;
+  }
+
+  let result: { stdout: string; stderr: string };
+  try {
+    result = await window.withProgress(
+      {
+        location: ProgressLocation.Notification,
+        title: l10n.t("Running tests with coverage"),
+        cancellable: false,
+      },
+      () => new Promise((resolve, reject) => {
+        execFile(
+          resolveCli(),
+          ["jaribu", "--chanjo", "--json"],
+          { cwd: root, windowsHide: true, maxBuffer: 8 * 1024 * 1024 },
+          (error, stdout, stderr) => {
+            if (error && !stdout.trim()) {
+              reject(new Error(stderr.trim() || error.message));
+              return;
+            }
+            resolve({ stdout, stderr });
+          }
+        );
+      })
+    );
+  } catch (error) {
+    void window.showErrorMessage(
+      l10n.t("Could not run coverage: {0}", error instanceof Error ? error.message : String(error))
+    );
+    return;
+  }
+
+  try {
+    const report = parseCoverageReport(result.stdout);
+    const coverage = report.chanjo;
+    const summary = l10n.t(
+      "Coverage: {0}/{1} lines ({2}%). Tests: {3} passed, {4} failed.",
+      coverage.mistari_yaliyotimizwa,
+      coverage.mistari_jumla,
+      coverage.asilimia.toFixed(1),
+      report.sawa,
+      report.kosa
+    );
+    output.clear();
+    output.appendLine(summary);
+    output.appendLine("");
+    output.appendLine(result.stdout.trim());
+    if (result.stderr.trim()) {
+      output.appendLine(result.stderr.trim());
+    }
+
+    const action = report.kosa > 0
+      ? await window.showWarningMessage(summary, l10n.t("Show coverage details"))
+      : await window.showInformationMessage(summary, l10n.t("Show coverage details"));
+    if (action) {
+      output.show(true);
+    }
+  } catch (error) {
+    void window.showErrorMessage(
+      l10n.t("Could not read coverage results: {0}", error instanceof Error ? error.message : String(error))
+    );
   }
 }
 
@@ -228,6 +342,8 @@ async function startDebugging(uri?: Uri): Promise<void> {
 }
 
 export function registerCommands(context: ExtensionContext): void {
+  const coverageOutput = window.createOutputChannel("Asili Coverage");
+  context.subscriptions.push(coverageOutput);
   const registrations = [
     commands.registerCommand("asili.build", async (uri?: Uri) => {
       if (!(await chooseBuildMode(context))) {
@@ -244,8 +360,9 @@ export function registerCommands(context: ExtensionContext): void {
       const args = buildArgs(context, true, target, root);
       await executePata(args, l10n.t("Build and run Asili project"), root);
     }),
-    commands.registerCommand("asili.runWithTrace", async () => {
-      const root = activeProjectRoot();
+    commands.registerCommand("asili.runWithTrace", async (uri?: Uri) => {
+      const sourceFile = uri?.fsPath ?? currentFile();
+      const root = projectRootFor(uri);
       if (!root) {
         void window.showWarningMessage(l10n.t("Open a project folder first"));
         return;
@@ -258,7 +375,7 @@ export function registerCommands(context: ExtensionContext): void {
         return;
       }
       const args = [
-        ...buildArgs(context, true),
+        ...buildArgs(context, true, sourceFile, root),
         `--fuatilia=binari:${trace.fsPath}`,
       ];
       const exitCode = await executePataAndWait(args, l10n.t("Build and run with tracing"), root);
@@ -282,9 +399,7 @@ export function registerCommands(context: ExtensionContext): void {
       )
     ),
     commands.registerCommand("asili.test", () => executePata(["jaribu"], l10n.t("Run Asili tests"))),
-    commands.registerCommand("asili.testCoverage", () =>
-      executePata(["jaribu", "--chanjo", "--json"], l10n.t("Run tests with coverage"))
-    ),
+    commands.registerCommand("asili.testCoverage", () => showCoverageReport(coverageOutput)),
     commands.registerCommand("asili.formatProject", () =>
       executePata(["nadhifu"], l10n.t("Format Asili project"))
     ),
@@ -358,7 +473,7 @@ export function registerCommands(context: ExtensionContext): void {
 
   const provider: TaskProvider = {
     provideTasks: () =>
-      taskCommands.map((item) => createPataTask(item.args, `pata: ${item.label}`)),
+      taskCommands.map((item) => createPataTask(item.args, `pata: ${l10n.t(item.label)}`)),
     resolveTask: (task) => {
       const definition: TaskDefinition = task.definition;
       if (

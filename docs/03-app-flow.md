@@ -26,15 +26,16 @@ flowchart TD
 | Surface | What it offers |
 | --- | --- |
 | Command Palette (`Asili:` category) | Every command in the coverage table |
-| Status bar item | Mwalimu state and build target; click: Jenga, Endesha, Jaribu, change target, show tools, restart Mwalimu |
+| Status bar item | Mwalimu state and build target; click for searchable project, test, debug, trace, formatting, lint, dependency, REPL and tool actions |
 | CodeLens on `kazi kuu` | Endesha · Tatua (debug) |
 | CodeLens on `#[jaribio]` functions | Endesha jaribio · Tatua jaribio |
 | CodeLens in `pata.toml` `[tegemezi]` | Ongeza tegemezi · Ondoa |
 | Test Explorer | Every test, run, debug, run with coverage |
 | Run Task | `pata: jenga`, `pata: jenga --tenda`, `pata: jaribu`, `pata: nadhifu`, `pata: thibitisha` |
 | Run and Debug (F5) | Debug configuration `asili` |
-| Explorer context menu | On `.asb`: Tenda. On a folder: Unda mradi mpya hapa |
-| Editor title bar | Run button (Endesha) on Asili files |
+| Explorer context menu | On Asili source: build, run, trace, debug. On `pata.toml`: add/remove dependency. On `.asb`: run artifact. On a folder: create project |
+| Editor title bar | Run, trace and debug on Asili files |
+| Trace view welcome | Explains how to run with tracing or open an existing binary recording |
 
 ## Flow 1: create and run a project
 
@@ -59,8 +60,10 @@ flowchart TD
 1. The Test Explorer lists tests found by `pata jaribu --orodha --json`.
 2. Run one test (CodeLens or explorer): `pata jaribu --json --chuja <name>`; pass or fail appears
    in the Testing view with the failure message.
-3. **Run with coverage**: `pata jaribu --chanjo --json`; aggregate line counts and percentage
-   appear in task output. Per-line editor decorations await line-level CLI output.
+3. **Run with coverage**: `pata jaribu --chanjo --json`; the extension shows an aggregate
+   statement count and percentage, test pass/fail totals, and the complete JSON in the Asili
+   Coverage output channel. The CLI currently aggregates line numbers across files, so per-file
+   editor decorations would be inaccurate until the CLI reports file-qualified lines.
 
 ## Flow 4: debug
 

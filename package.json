@@ -21,8 +21,6 @@
   ],
   "main": "./out/extension.js",
   "activationEvents": [
-    "onLanguage:asili",
-    "onLanguage:pata-manifest",
     "workspaceContains:pata.toml"
   ],
   "contributes": {
@@ -366,12 +364,52 @@
           "command": "asili.run",
           "when": "editorLangId == asili",
           "group": "navigation"
+        },
+        {
+          "command": "asili.debug",
+          "when": "editorLangId == asili",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.runWithTrace",
+          "when": "editorLangId == asili",
+          "group": "navigation"
         }
       ],
       "explorer/context": [
         {
+          "command": "asili.run",
+          "when": "resourceLangId == asili",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.build",
+          "when": "resourceLangId == asili",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.debug",
+          "when": "resourceLangId == asili",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.runWithTrace",
+          "when": "resourceLangId == asili",
+          "group": "navigation"
+        },
+        {
           "command": "asili.runArtifact",
           "when": "resourceExtname == .asb",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.addDependency",
+          "when": "resourceFilename == pata.toml",
+          "group": "navigation"
+        },
+        {
+          "command": "asili.removeDependency",
+          "when": "resourceFilename == pata.toml",
           "group": "navigation"
         },
         {
@@ -381,6 +419,13 @@
         }
       ]
     },
+    "viewsWelcome": [
+      {
+        "view": "asili.trace",
+        "contents": "%view.traceWelcome%",
+        "when": "view == asili.trace"
+      }
+    ],
     "views": {
       "explorer": [
         {

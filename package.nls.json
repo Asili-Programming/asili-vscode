@@ -29,6 +29,7 @@
   "command.restartServer": "Asili: Restart Mwalimu",
   "command.debug": "Asili: Debug",
   "view.trace": "Asili Trace",
+  "view.traceWelcome": "Open a binary trace recording from Asili: Open Trace, or run the active program with Asili: Run with Trace.",
   "task.args": "Arguments passed to the Pata CLI, including the subcommand.",
   "task.cwd": "Working directory for the Pata command.",
   "task.label": "Optional task label shown in VS Code.",

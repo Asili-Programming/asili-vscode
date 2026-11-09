@@ -21,7 +21,10 @@ fi
 
 cargo build --release "${target_args[@]}" --manifest-path "$asili/Cargo.toml" -p pata-lsp -p pata-dap
 target_dir="$(cargo metadata --format-version 1 --no-deps --manifest-path "$asili/Cargo.toml" \
-  | sed -n 's/.*"target_directory":"\([^"]*\)".*/\1/p')"
+  | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>process.stdout.write(JSON.parse(s).target_directory))')"
+if command -v cygpath >/dev/null 2>&1; then
+  target_dir="$(cygpath -u "$target_dir")"
+fi
 destination="$here/bin/$platform"
 suffix=""
 if [[ "$target" == *windows* ]] || [[ -z "$target" && "$(uname -s)" == "MINGW"* ]]; then

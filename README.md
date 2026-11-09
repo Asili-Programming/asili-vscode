@@ -70,9 +70,12 @@ Use the Command Palette, CodeLens, Testing view, status bar, and F5 for common P
 without typing routine CLI commands:
 
 - Create an application, library, or workspace; add or remove dependencies.
+- Run, build, or debug `.as` files from the editor title bar or Explorer; run `.asb` artifacts
+  and manage dependencies from Explorer context menus.
 - Build and run a project or a single file, select a target (`native`, `wasm`, `cortex-m`,
   `esp32`), inspect workspace members, run an `.asb`, or open the REPL.
-- Discover and run tests in Testing; run coverage and inspect its JSON summary in task output.
+- Discover and run tests in Testing; run coverage and see its statement summary plus full JSON
+  report in the Asili Coverage output channel.
 - Format and check project formatting; lint a file or workspace and verify the project.
 - Run with tracing and inspect a binary trace as a tree.
 - Set a breakpoint and press F5: pata-dap supports pause, continue, stepping, stack trace, and

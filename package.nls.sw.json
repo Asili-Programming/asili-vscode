@@ -29,6 +29,7 @@
   "command.restartServer": "Asili: Anzisha upya Mwalimu",
   "command.debug": "Asili: Tatua",
   "view.trace": "Ufuatiliaji wa Asili",
+  "view.traceWelcome": "Fungua faili ya ufuatiliaji kwa Asili: Fungua ufuatiliaji, au endesha programu iliyo wazi kwa Asili: Endesha kwa ufuatiliaji.",
   "task.args": "Hoja zinazopitishwa kwa zana ya Pata, pamoja na amri ndogo.",
   "task.cwd": "Folda ya kufanya kazi ya amri ya Pata.",
   "task.label": "Jina la hiari la kazi linaloonyeshwa na VS Code.",

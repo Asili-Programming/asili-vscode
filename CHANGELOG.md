@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 
+### Added
+
+- Added editor and Explorer actions for build, run, debug, trace, `.asb` execution, and manifest
+  dependency management; expanded the status-bar workflow picker and added coverage/format-check
+  task presets.
+- Added a guided trace-view welcome message and a coverage progress/result flow with validated
+  summaries and a dedicated output channel.
+- Added Linux, macOS, and Windows CI builds that package platform-specific VSIX artifacts.
+
+### Fixed
+
+- Prevented Mwalimu from parsing `pata.toml` as Asili source, which caused the false
+  `PAR000` "token isiyotegemewa kwenye kiwango cha juu" diagnostic; manifest highlighting and
+  dependency CodeLens remain enabled.
+- Removed redundant `onLanguage` activation events; VS Code generates them from the contributed
+  Asili and Pata Manifest languages.
+
 ## [0.3.0]
 
 ### Added

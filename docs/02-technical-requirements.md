@@ -49,7 +49,7 @@ tools), which also prints each tool's version.
 
 - Every command in the PRD coverage table is registered in `package.json` `contributes.commands`
   with a `%key%` title and a `category` of `Asili`, so the palette reads "Asili: Jenga mradi".
-- Commands that run a CLI process use a VS Code task (`ShellExecution`, cwd = the folder holding
+- Most commands that run a CLI process use a VS Code task (`ProcessExecution`, cwd = the folder holding
   `pata.toml`, found by the same walk as `pata_config::find_project_root`), so output, exit codes
   and re-run come from VS Code for free.
 - `contributes.taskDefinitions` adds type `pata` with properties `amri` (command) and `chagua`
@@ -66,9 +66,10 @@ tools), which also prints each tool's version.
   preceded by the tests' own printed output on stdout, so the result cannot be parsed reliably. The
   CLI must print test output on stderr, or inside the JSON, when `--json` is set (issue in the Asili
   repo).
-- Coverage runs `pata jaribu --chanjo --json` and presents aggregate line counts in task output.
-  The current CLI JSON has no per-file line map, so the extension does not fabricate editor
-  coverage decorations. Add Testing API `FileCoverage` only after the CLI exposes line-level data.
+- Coverage runs `pata jaribu --chanjo --json`, displays aggregate statement counts and test totals,
+  and keeps the full JSON in an output channel. The CLI aggregates line numbers across source
+  files, so the extension does not fabricate file-specific `FileCoverage` decorations. Add them
+  only after the CLI reports file-qualified executed/total line sets.
 - The Mwalimu code lens for tests stays, but calls the Testing API instead of a terminal.
 
 ## Debugger

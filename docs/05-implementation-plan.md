@@ -33,7 +33,7 @@ flowchart LR
 | 6 | Commands for common Pata workflows: build, run, trace, format, lint, verify, project, deps, REPL and artifacts | asili-vscode | VS-2 | 2 | Done |
 | 7 | `pata` task type and provider | asili-vscode | VS-4 | 2 | Done |
 | 8 | Test Explorer via `jaribu --orodha --json` and `--chuja` | asili-vscode | VS-3 | 2 | Done |
-| 9 | Coverage command with machine-readable aggregate summary | asili-vscode | VS-10 | 2 | Done; per-line data unavailable |
+| 9 | Coverage command with machine-readable summary and user-facing results | asili-vscode | VS-10 | 2 | Done; Pata reports aggregate statement coverage, surfaced in a summary and output channel |
 | 10 | Every `pata` command answers `--msaada` | Asili | VS-2 | 2 | Done (Asili `776dcaf`) |
 | 11 | Clean JSON from `jaribu --json`; machine format for `--chanjo` | Asili | VS-3, VS-10 | 2 | Not started |
 | 12 | `jenga --json` and an error on unknown flags | Asili | VS-NFR-4 | 2 | Not started |
@@ -47,6 +47,8 @@ flowchart LR
 | 20 | Integration tests with `@vscode/test-electron` in CI | asili-vscode | VS-NFR-6 | 4 | Done |
 | 21 | Marketplace README (Swahili first) | asili-vscode | Design Brief | 4 | Done; demo GIF deferred |
 | 22 | Publish per platform to Marketplace and Open VSX | asili-vscode | Scope | 4 | Blocked on publisher credentials |
+| 23 | Add Explorer/editor actions, complete the status-bar action menu, and add trace-view guidance | asili-vscode | Design Brief | 4 | Done |
+| 24 | Surface the `jaribu --chanjo --json` aggregate summary and raw report in VS Code | asili-vscode | VS-10 | 4 | Done |
 
 Tasks 16 and 17 landed in the Asili repo on 7 November 2026, so the extension's debugger (task 14)
 can expose stepping, pause, evaluate, set variable and restart from its first release. The lint
@@ -64,6 +66,7 @@ commands already run `pata kagua` (asili-vscode `b713090`).
 
 - [ ] Every v1 row of the coverage table has a working surface, checked by hand on a fixture project.
 - [ ] Run Test, Test Explorer and coverage work on Linux, macOS and Windows.
+- [ ] Build and package the matching LSP and DAP binaries on Linux, macOS and Windows in CI.
 - [ ] F5 stops at a breakpoint and shows variables.
 - [ ] Every string shows in Swahili with VS Code set to Swahili, and in English otherwise.
 - [ ] The wiki's Editor Support page lists every command and setting.

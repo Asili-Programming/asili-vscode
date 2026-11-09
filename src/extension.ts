@@ -60,7 +60,6 @@ function startLanguageClient(context: ExtensionContext): LanguageClient {
   const options: LanguageClientOptions = {
     documentSelector: [
       { scheme: "file", language: "asili" },
-      { scheme: "file", language: "pata-manifest" },
     ],
     synchronize: {
       fileEvents: [
@@ -211,9 +210,23 @@ function registerStatusBar(context: ExtensionContext): void {
     commands.registerCommand("asili.statusMenu", async () => {
       const selected = await window.showQuickPick(
         [
+          { label: l10n.t("Create project"), command: "asili.newProject" },
           { label: l10n.t("Build"), command: "asili.build" },
           { label: l10n.t("Run"), command: "asili.run" },
+          { label: l10n.t("Run with trace"), command: "asili.runWithTrace" },
           { label: l10n.t("Run tests"), command: "asili.test" },
+          { label: l10n.t("Run tests with coverage"), command: "asili.testCoverage" },
+          { label: l10n.t("Format project"), command: "asili.formatProject" },
+          { label: l10n.t("Check formatting"), command: "asili.formatCheck" },
+          { label: l10n.t("Lint current file"), command: "asili.lintFile" },
+          { label: l10n.t("Lint workspace"), command: "asili.lintWorkspace" },
+          { label: l10n.t("Verify project"), command: "asili.verify" },
+          { label: l10n.t("Add dependency"), command: "asili.addDependency" },
+          { label: l10n.t("Remove dependency"), command: "asili.removeDependency" },
+          { label: l10n.t("Open REPL"), command: "asili.repl" },
+          { label: l10n.t("Show workspace members"), command: "asili.workspaceInfo" },
+          { label: l10n.t("Run artifact"), command: "asili.runArtifact" },
+          { label: l10n.t("Open trace"), command: "asili.openTrace" },
           { label: l10n.t("Select build target"), command: "asili.selectTarget" },
           { label: l10n.t("Select build mode"), command: "asili.selectMode" },
           { label: l10n.t("Show build timings"), command: "asili.buildTimings" },

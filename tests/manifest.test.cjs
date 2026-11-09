@@ -48,3 +48,50 @@ test("every contributed command has an implementation and Pata workflow surfaces
   assert.ok(manifest.contributes.taskDefinitions.some((task) => task.type === "pata"));
   assert.ok(manifest.contributes.views.explorer.some((view) => view.id === "asili.trace"));
 });
+
+test("Pata manifests are not sent to Mwalimu for Asili parsing", () => {
+  const manifest = readJson("package.json");
+  const source = fs.readFileSync(path.join(root, "src/extension.ts"), "utf8");
+  const documentSelector = source.match(/documentSelector:\s*\[([\s\S]*?)\]/)?.[1];
+  assert.ok(documentSelector, "Mwalimu document selector should be declared");
+  assert.match(documentSelector, /language:\s*"asili"/);
+  assert.doesNotMatch(documentSelector, /pata-manifest/);
+  assert.ok(manifest.contributes.languages.some((language) => language.id === "pata-manifest"));
+});
+
+test("language activation events are generated from language contributions", () => {
+  const manifest = readJson("package.json");
+  assert.ok(manifest.contributes.languages.some((language) => language.id === "asili"));
+  assert.ok(manifest.contributes.languages.some((language) => language.id === "pata-manifest"));
+  assert.ok(manifest.activationEvents.includes("workspaceContains:pata.toml"));
+  assert.ok(!manifest.activationEvents.some((event) => event.startsWith("onLanguage:")));
+});
+
+test("Explorer and editor menus expose source, artifact, and manifest actions", () => {
+  const manifest = readJson("package.json");
+  const explorerCommands = manifest.contributes.menus["explorer/context"].map((item) => item.command);
+  const editorCommands = manifest.contributes.menus["editor/title"].map((item) => item.command);
+  for (const command of ["asili.run", "asili.build", "asili.debug", "asili.runWithTrace", "asili.runArtifact"]) {
+    assert.ok(explorerCommands.includes(command), `Explorer should expose ${command}`);
+  }
+  for (const command of ["asili.addDependency", "asili.removeDependency"]) {
+    assert.ok(explorerCommands.includes(command), `pata.toml context should expose ${command}`);
+  }
+  assert.ok(editorCommands.includes("asili.run"));
+  assert.ok(editorCommands.includes("asili.debug"));
+  assert.ok(editorCommands.includes("asili.runWithTrace"));
+  assert.ok(manifest.contributes.viewsWelcome.some((view) => view.view === "asili.trace"));
+});
+
+test("coverage command produces a structured summary and is available as a task", () => {
+  const source = fs.readFileSync(path.join(root, "src/commands.ts"), "utf8");
+  const manifest = readJson("package.json");
+  assert.match(source, /commands\.registerCommand\("asili\.testCoverage",\s*\(\) => showCoverageReport/);
+  assert.match(source, /mistari_yaliyotimizwa/);
+  assert.match(source, /showInformationMessage\(summary/);
+  assert.ok(
+    manifest.contributes.taskDefinitions.some((task) => task.type === "pata"),
+    "custom Pata tasks should remain available for advanced workflows"
+  );
+  assert.ok(source.includes('["jaribu", "--chanjo", "--json"]'));
+});
