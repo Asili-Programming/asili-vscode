@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-11-09
+
 ### Added
 
 - Added editor and Explorer actions for build, run, debug, trace, `.asb` execution, and manifest
