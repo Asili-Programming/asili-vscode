@@ -2,10 +2,10 @@
   "name": "asili",
   "displayName": "Asili",
   "description": "Asili language support and Pata project workflows: build, run, test, debug, and more.",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "publisher": "asili",
   "license": "GPL-2.0-only",
-  "icon": "assets/Asili_Logo.png",
+  "icon": "assets/asili-extension-icon.png",
   "repository": {
     "type": "git",
     "url": "https://github.com/Asili-Programming/asili-vscode.git"
@@ -35,8 +35,8 @@
           ".asi"
         ],
         "icon": {
-          "light": "./assets/Asili_Logo.png",
-          "dark": "./assets/Asili_Logo.png"
+          "light": "./assets/asili-file-light.png",
+          "dark": "./assets/asili-file-dark.png"
         },
         "configuration": "./language-configuration.json"
       },
@@ -441,7 +441,7 @@
     "bundle": "node esbuild.js",
     "compile": "npm run check-types && npm run bundle",
     "test": "node --test tests/manifest.test.cjs && node ./tests/runTests.js",
-    "package": "vsce package --no-dependencies",
+    "package": "node scripts/package.js",
     "build-tools": "bash scripts/build-tools.sh",
     "build-lsp": "bash scripts/build-lsp.sh",
     "watch": "node esbuild.js --watch"

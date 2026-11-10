@@ -1,6 +1,6 @@
 # Asili VS Code extension — App Flow
 
-As of 9 November 2026 · Victor Kaiuki
+As of 10 November 2026 · Victor Kaiuki
 
 A developer opens a folder, sees Mwalimu start in the status bar, and from then on reaches every
 Pata tool from the Command Palette, CodeLens, the Test Explorer, Run Task or F5.

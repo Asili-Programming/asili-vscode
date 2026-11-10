@@ -67,6 +67,25 @@ test("language activation events are generated from language contributions", () 
   assert.ok(!manifest.activationEvents.some((event) => event.startsWith("onLanguage:")));
 });
 
+test("extension and language icons use the playground mark in light and dark variants", () => {
+  const manifest = readJson("package.json");
+  const iconPath = path.join(root, manifest.icon);
+  const icon = fs.readFileSync(iconPath);
+  assert.equal(icon.readUInt32BE(16), 256);
+  assert.equal(icon.readUInt32BE(20), 256);
+
+  const asili = manifest.contributes.languages.find((language) => language.id === "asili");
+  assert.ok(asili.icon, "Asili files should have a language icon");
+  const light = fs.readFileSync(path.join(root, asili.icon.light));
+  const dark = fs.readFileSync(path.join(root, asili.icon.dark));
+  assert.equal(light.readUInt32BE(16), 32);
+  assert.equal(light.readUInt32BE(20), 32);
+  assert.equal(dark.readUInt32BE(16), 32);
+  assert.equal(dark.readUInt32BE(20), 32);
+  assert.notDeepEqual(light, dark, "dark-theme icon should use a contrasting color");
+  assert.match(fs.readFileSync(path.join(root, "assets/asili-mark.svg"), "utf8"), /viewBox="0 0 470 500"/);
+});
+
 test("Explorer and editor menus expose source, artifact, and manifest actions", () => {
   const manifest = readJson("package.json");
   const explorerCommands = manifest.contributes.menus["explorer/context"].map((item) => item.command);

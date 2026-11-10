@@ -1,19 +1,17 @@
 # Asili VS Code extension — Product Requirements Document
 
-As of 9 November 2026 · Victor Kaiuki
+As of 10 November 2026 · Victor Kaiuki
 
-Every Pata tool and every Mwalimu (LSP) feature should be reachable from VS Code without opening a
-terminal: from the Command Palette, the status bar, CodeLens, tasks and the debugger. Today the
-extension exposes three commands.
+Every in-scope Pata workflow and Mwalimu (LSP) feature should be reachable from VS Code through the
+Command Palette, status bar, CodeLens, tasks, Testing view and debugger. The v0.5.0 implementation
+has commands, tasks, language support, testing, tracing and debugging; platform CI verification
+and store publication remain release work.
 
 ## Problem and goals
 
-The extension (v0.2.0) gives syntax highlighting, snippets, the Mwalimu language server and three
-commands: Run Test, Lint Current File, Lint Workspace. Everything else Pata does needs a terminal:
-building, running, formatting a project, checking a project, creating one, managing dependencies,
-the REPL, tracing, coverage and debugging. `pata-dap` exists but the extension registers no
-debugger. Run Test was broken until 7 November 2026: it sent `pata jaribu --filter`, which the CLI
-rejects (`kosa: hoja isiyotambuliwa kwenye jaribu: --filter`); it now sends `--chuja` (VS-1, done).
+The initial extension lacked most Pata workflows and did not register a debugger. The current
+implementation addresses those gaps with commands, tasks, Testing API integration, trace
+exploration and a `pata-dap` debugger. Run Test now uses the supported `--chuja` flag (VS-1, done).
 
 Goals:
 
@@ -39,26 +37,26 @@ Every row must have a surface in v1 unless marked v2. "Today" is what v0.2.0 doe
 
 | Pata tool | What it does | Today | Required surface |
 | --- | --- | --- | --- |
-| `pata jenga` | Build project or file | None | Command, task, status bar build button |
-| `pata jenga --tenda` | Build and run `kuu` | None | Command, CodeLens on `kazi kuu`, task |
-| `jenga --namna release` | Release build | None | Command option (quick pick) |
-| `jenga --lengo native/wasm/cortex-m` | Build target | None | Quick pick, remembered per workspace |
-| `jenga --workspace-info` | Workspace members | None | Command, shown in an output panel |
-| `jenga --muda` | Phase timings | None | Command option |
-| `pata tenda` | Run a built `.asb` | None | Explorer context menu on `.asb` files |
-| `--fuatilia`, `pata fuatilia` | Trace build and run; read a trace | None | Command "run with trace", saved trace opened as a tree view |
-| `pata jaribu` | Run tests | Run Test CodeLens (terminal) | Testing API (Test Explorer), CodeLens per test, `--chuja` |
-| `jaribu --chanjo --json` | Coverage summary | None | "Run tests with coverage", structured summary in task output |
-| `jaribu --orodha`, `--json` | List tests, machine output | None | Used by the Test Explorer to discover tests |
-| `pata nadhifu` | Format | Via LSP format only | Format document (LSP), command "format project", `--kagua` check |
-| `pata kagua` | Lint (replaced the `pata-lint` binary) | Two commands running `pata kagua` in a terminal | Diagnostics in Problems, commands kept, `--makosa-tu` setting |
-| `pata thibitisha` | Verify project | None | Command, task |
-| `pata njozi` | New project (`--maktaba`, `--workspace`, `--kiasi`) | None | Command with quick picks, opens the new folder |
-| `pata ongeza`, `pata ondoa` | Add or remove dependency (`--git`, `--tawi`, `--toleo`) | None | Commands; CodeLens in `pata.toml` |
-| `pata repl` | REPL | None | Command opens REPL terminal |
-| `pata mwalimu` / `pata-lsp` | Language server | Started on activation | Restart command, status in status bar |
-| `pata-dap` | Debugger | None | Debug type `asili`, launch configurations, F5 |
-| `tenda` | Standalone runner | None | v2: used by "run artifact" when `pata` is absent |
+| `pata jenga` | Build project or file | Command, task, status-bar action |
+| `pata jenga --tenda` | Build and run `kuu` | Command, CodeLens, task |
+| `jenga --namna release` | Release build | Build-mode quick pick |
+| `jenga --lengo native/wasm/cortex-m` | Build target | Workspace-persisted target quick pick |
+| `jenga --workspace-info` | Workspace members | Command and output panel |
+| `jenga --muda` | Phase timings | Build-timings command |
+| `pata tenda` | Run a built `.asb` | Explorer context menu and command |
+| `--fuatilia`, `pata fuatilia` | Trace build/run; read trace | Run-with-trace command; decoded trace tree |
+| `pata jaribu` | Run tests | Test Explorer, CodeLens, command and task |
+| `jaribu --chanjo --json` | Coverage summary | Testing view and Asili Coverage output channel |
+| `jaribu --orodha`, `--json` | List tests, machine output | Test Explorer discovery |
+| `pata nadhifu` | Format | LSP document formatting, project format and check commands |
+| `pata kagua` | Lint | File/workspace commands; uses `pata-lint` compatibility fallback |
+| `pata thibitisha` | Verify project | Command and task |
+| `pata njozi` | New project (`--maktaba`, `--workspace`, `--kiasi`) | Guided command and open-folder action |
+| `pata ongeza`, `pata ondoa` | Manage dependencies | Commands and `pata.toml` CodeLens/context actions |
+| `pata repl` | REPL | Command opens integrated terminal |
+| `pata mwalimu` / `pata-lsp` | Language server | Activation, status bar and restart command |
+| `pata-dap` | Debugger | `asili` launch configuration, F5 and breakpoint support |
+| `tenda` | Standalone runner | v2: fallback when `pata` is absent |
 
 Mwalimu features already delivered through LSP (must stay on and be listed in the walkthrough):
 diagnostics, hover, completion, signature help, go to definition, find references, rename,
@@ -67,9 +65,11 @@ code lens, formatting.
 
 ## Scope
 
-**v1:** the coverage table above, the debugger with everything `pata-dap` implements (breakpoints,
+**v1:** the coverage table above, the debugger features promised by VS-5/VS-12 (breakpoints,
 continue, step over, step in, step out, pause, evaluate, set variable, restart), Swahili and
 English localisation, a walkthrough, and publishing to the VS Code Marketplace and Open VSX.
+The current implementation does not yet satisfy all of v1: debugger evaluate/setVariable/restart,
+cross-platform CI validation, final manual UX verification, and store publication remain open.
 
 **v2:** `tenda` fallback; a trace visualiser beyond a tree; debugger features `pata-dap` does not
 have yet (conditional breakpoints, a multi-frame call stack, program output in the debug console).
@@ -92,7 +92,7 @@ Pata CLI inside the extension.
 | VS-9 | New project and add dependency are guided with quick picks | Should | v1 |
 | VS-10 | Aggregate coverage summary shown in task output | Should | v1 |
 | VS-11 | Trace output shown as a tree view | Could | v1 |
-| VS-12 | Step over, step in, step out, pause, evaluate, set variable, restart (all supported by `pata-dap` since Asili `9e76e6f`) | Must | v1 |
+| VS-12 | Step over, step in, step out, pause, evaluate, set variable, restart | Must | v1 |
 
 ## Non-functional requirements
 
@@ -100,7 +100,7 @@ Pata CLI inside the extension.
 | --- | --- | --- |
 | VS-NFR-1 | Startup | Activates only on Asili files or a `pata.toml`; activation under 500 ms excluding the LSP spawn |
 | VS-NFR-2 | Language | All user-facing strings in `package.nls.json` (English) and `package.nls.sw.json` (Swahili) plus `l10n/` bundles; Swahili follows the project's conventions |
-| VS-NFR-3 | Tool resolution | One function resolves every tool: setting, then bundled binary, then `PATH` |
+| VS-NFR-3 | Tool resolution | Centralized per-tool resolution: configured path, bundled binary where available, then `PATH` |
 | VS-NFR-4 | Machine output | The extension reads `--json` output where the CLI offers it, never scrapes human text |
 | VS-NFR-5 | Accessibility | Every command reachable from the keyboard; no information only in colour |
 | VS-NFR-6 | Compatibility | VS Code 1.145 or newer (current `engines.vscode`); Linux, macOS, Windows |

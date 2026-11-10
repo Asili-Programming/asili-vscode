@@ -10,6 +10,7 @@ docs/**
 !docs/walkthrough/**
 docs-tooling/**
 docs-site/**
+assets/asili-mark.svg
 .github/**
 !bin/**
 .gitignore

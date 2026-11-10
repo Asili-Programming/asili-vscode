@@ -1,6 +1,6 @@
 # Asili VS Code extension — Design Brief
 
-As of 9 November 2026 · Victor Kaiuki
+As of 10 November 2026 · Victor Kaiuki
 
 The extension should feel native to VS Code: theme colours, codicons and VS Code's own patterns.
 Asili's identity shows in three places only: the extension icon, the file icon and the words.
@@ -44,10 +44,11 @@ Notification text: one sentence saying what happened, one action button. No excl
 
 ## Icons
 
-- **Extension icon:** the logo's tree mark (no wordmark) on the paper colour `#f0f0ed`, from the
-  vector logo the website's Design Brief asks for. 256 × 256 PNG.
-- **File icon** for `.as` and `.asi`: the mark simplified to read at 16 px; light and dark variants.
-  Contributed through `languages[].icon`, so it shows even without a file-icon theme.
+- **Extension icon:** `assets/asili-extension-icon.png`, rendered at 256 × 256 from the playground's
+  `logo-mark.svg`: tree mark, no wordmark, on the paper colour `#f0f0ed`.
+- **File icon** for `.as` and `.asi`: `assets/asili-file-light.png` and
+  `assets/asili-file-dark.png`, 32 × 32 transparent mark variants. Contributed through
+  `languages[].icon`, so they show even without a file-icon theme.
 - **Codicons** everywhere else: `$(play)` Endesha, `$(debug-alt)` Tatua, `$(beaker)` tests,
   `$(tools)` show tools, `$(sync~spin)` while Mwalimu starts, `$(warning)` when it is down.
 
@@ -65,8 +66,9 @@ $(sync~spin) Mwalimu             starting
 $(warning) Mwalimu               stopped (warning background)
 ```
 
-Hover shows the tool paths and versions; click opens a quick pick with Jenga, Endesha, Jaribu,
-Chagua lengo, Onyesha zana, Anzisha upya Mwalimu.
+Hover shows the tool paths and versions; click opens a quick pick covering project creation,
+build/run/debug/trace, tests/coverage, formatting/lint/verification, dependencies, REPL,
+workspace/artifacts, target/mode selection, tool details, and Mwalimu restart.
 
 ## Walkthrough
 
@@ -78,7 +80,8 @@ Five steps, each with one short paragraph, one button and one image or animation
 4. Tatua (breakpoint and variables).
 5. Mwalimu anakusaidia (hover, completion, rename, quick fixes, format on save).
 
-Images are real screenshots in light and dark themes, under 200 KB each.
+Walkthrough copy and actions are implemented. The per-step light/dark screenshots are still
+outstanding; the current walkthrough uses VS Code's built-in markdown media without screenshots.
 
 ## Marketplace page
 

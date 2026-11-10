@@ -1,4 +1,5 @@
 node_modules/
+.vscode-test/
 *.vsix
 # pata-lsp, built from an Asili checkout by scripts/build-lsp.sh
 bin/

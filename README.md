@@ -50,7 +50,7 @@ Syntax highlighting and full language server support (Mwalimu) for the Asili lan
 - Re-checked automatically when a `.as`/`pata.toml`/`pata.lock` file changes on disk — including
   edits made outside the editor.
 
-## Mzunguko wa Pata / Pata workflow
+## Mzunguko wa Pata
 
 Tumia Command Palette, vitufe vya CodeLens, mwonekano wa Testing, status bar na F5 bila kuandika
 amri za kawaida za Pata kwenye terminal:
@@ -65,6 +65,8 @@ amri za kawaida za Pata kwenye terminal:
 - Weka kituo cha kusimama na ubonyeze F5: pata-dap hutoa kusimama, kuendelea, kupiga hatua,
   stack trace na vigeu.
 - Status bar huonyesha hali ya Mwalimu na lengo la kujenga; walkthrough huongoza mtumiaji mpya.
+
+## Pata workflow
 
 Use the Command Palette, CodeLens, Testing view, status bar, and F5 for common Pata workflows,
 without typing routine CLI commands:

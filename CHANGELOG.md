@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-11-10
+
+### Added
+
+- Added the 256 × 256 extension icon and separate 32 × 32 light/dark Asili file icons from the
+  playground's canonical `logo-mark.svg`.
+- Added an extension-host debugger smoke test that launches the bundled `pata-dap`, stops at a
+  source breakpoint, reads and updates a local variable, steps, and restarts the debuggee.
+
+### Fixed
+
+- Marked packaged VSIX files with their host platform target so users receive the bundled
+  `pata-lsp` and `pata-dap` binaries matching their OS and architecture.
+
 ## [0.4.0] - 2026-11-09
 
 ### Added
